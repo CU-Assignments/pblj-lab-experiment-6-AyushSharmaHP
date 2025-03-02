@@ -1,6 +1,4 @@
-import java.io.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 class Product {
@@ -33,7 +31,6 @@ class Product {
 
 public class ProductProcessor {
     public static void main(String[] args) {
-        // Sample list of products (Can be replaced with CSV reading logic)
         List<Product> products = Arrays.asList(
             new Product("Laptop", "Electronics", 1200),
             new Product("Phone", "Electronics", 800),
@@ -45,37 +42,31 @@ public class ProductProcessor {
             new Product("Headphones", "Electronics", 150)
         );
 
-        // Grouping products by category
         Map<String, List<Product>> groupedProducts = products.stream()
             .collect(Collectors.groupingBy(Product::getCategory));
 
-        // Finding the most expensive product in each category
         Map<String, Optional<Product>> mostExpensiveByCategory = products.stream()
             .collect(Collectors.groupingBy(
                 Product::getCategory,
                 Collectors.maxBy(Comparator.comparingDouble(Product::getPrice))
             ));
 
-        // Calculating the average price of all products
         double averagePrice = products.stream()
             .collect(Collectors.averagingDouble(Product::getPrice));
 
-        // Displaying grouped products
         System.out.println("Grouped Products by Category:");
-        groupedProducts.forEach((category, productList) -> {
+        groupedProducts.forEach((category, productList) -> 
             System.out.println(category + ": " + productList.stream()
                 .map(Product::getName)
-                .collect(Collectors.joining(", ")));
-        });
+                .collect(Collectors.joining(", ")))
+        );
 
-        // Displaying the most expensive product in each category
         System.out.println("\nMost Expensive Product in Each Category:");
-        mostExpensiveByCategory.forEach((category, product) ->
+        mostExpensiveByCategory.forEach((category, product) -> 
             System.out.println(category + ": " + 
                 product.map(p -> p.getName() + " - $" + p.getPrice()).orElse("No Products"))
         );
 
-        // Displaying the average price of all products
         System.out.printf("\nAverage Price of All Products: $%.2f\n", averagePrice);
     }
 }
